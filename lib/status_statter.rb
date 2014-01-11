@@ -12,10 +12,26 @@ class StatusStatter
       config.auth_method        = :oauth
     end
     @client = TweetStream::Client.new
+    @tracker_classes = []
   end
 
-  def run(&blk)
-    @client.sample(&blk)
+  def register(tracker)
+    @tracker_classes << tracker
+  end
+
+  def run
+    trackers = @tracker_classes.map(&:new)
+    @client.sample do |status|
+      puts "#{status.text.gsub}" if $DEBUG
+      trackers.each do |t|
+        t.record(status)
+      end
+    end
+  rescue SystemExit, Interrupt
+    trackers.each do |t|
+      puts t.report
+    end
+    exit
   end
 
 end
