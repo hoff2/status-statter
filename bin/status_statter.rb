@@ -7,6 +7,7 @@ Dir[File.join(dir, 'lib/status_statter/trackers/*.rb')].each do |file|
 end
 statter = StatusStatter.new
 statter.register Total
+puts "Here we go, hit control-c to stop..."
 trap("SIGINT") { statter.stop }
 statter.run
 puts "started: #{statter.start_time.inspect}"
