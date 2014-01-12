@@ -38,13 +38,26 @@ describe StatusStatter do
     statter.run
   end
 
+  class FakeClient
+    def api_method(&blk)
+      @handler = blk
+    end
+    def receive_status(status)
+      @handler.call(status)
+    end
+    def report; :report; end
+    def method_missing; :ignore; end
+  end
+
   it "notifies tracker objects of statuses received" do
-    client = double('client').as_null_object
-    tracker = double('TrackerClass')
-    statter = StatusStatter.new(:message, client)
-    statter.register(tracker)
-    tracker.should_receive(:new).and_return
+    client = FakeClient.new
+    statter = StatusStatter.new(:api_method, client)
+    tracker_class = double('TrackerClass')
+    tracker = double('tracker')
+    tracker_class.should_receive(:new).and_return(tracker)
+    statter.register(tracker_class)
+    tracker.should_receive(:record).with(:tweet)
     statter.run
-    pending "come up with a fake client"
+    client.receive_status(:tweet)
   end
 end
