@@ -9,7 +9,7 @@ class Total
   end
 
   def report
-    "Total: #{@count}"
+    { total: @count }
   end
 
 end

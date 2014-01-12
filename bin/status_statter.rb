@@ -12,4 +12,4 @@ trap("SIGINT") { statter.stop }
 statter.run
 puts "started: #{statter.start_time.inspect}"
 puts "stopped: #{statter.stop_time.inspect}"
-puts statter.results.inspect
+pp statter.results.inspect
