@@ -22,13 +22,16 @@ class StatusStatter
 
   def run
     trackers = @tracker_classes.map(&:new)
+    puts "Here we go..."
+    @start_time = Time.now
     @client.send(*@method) do |status|
-      puts "#{status.text.gsub}" if $DEBUG
+      puts "#{status.text}" if $DEBUG
       trackers.each do |t|
         t.record(status)
       end
     end
   rescue SystemExit, Interrupt
+    @stop_time = Time.now
     trackers.each do |t|
       puts t.report
     end
