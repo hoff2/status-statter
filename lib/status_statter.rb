@@ -2,8 +2,7 @@ class StatusStatter
 
   # optional arguments:
   # 1. which streaming API method to use -- its name as a symbol,
-  #    or an array of the method name symbol + arguments (suitable
-  #    for being passed to #send). Examples:
+  #    or an array of the method name symbol + arguments. Examples:
   #      :firehose
   #      [ :track, 'bacon', 'mom' ]
   # 2. API client. If none given, a Tweetstream::Client is created
@@ -11,8 +10,10 @@ class StatusStatter
   def initialize(message = :sample, _client = false)
     @client = _client || tweetstream_client
     @tracker_classes = []
-    @method = message
+    @message = message
   end
+
+  attr_reader :client, :message
 
   def tweetstream_client
     require_relative 'status_statter/config'
@@ -27,20 +28,19 @@ class StatusStatter
     TweetStream::Client.new
   end
 
-  # Add a class for an object that will be used to track stats.
+  # Add classes for objects that will be used to track stats.
   # An instance of each class added in this way will be created
   # Each should respond to #initialize, #record(status), and #report
-  def register(tracker)
-    @tracker_classes << tracker
+  def register(*tracker)
+    @tracker_classes += tracker
   end
 
   # Start up the status_statter. When stopped with Control-C/SIGINT,
   # reports will be collected from each of the tracker objects
   def run
     trackers = @tracker_classes.map(&:new)
-    puts "Here we go (Ctrl-C to stop)..."
     @start_time = Time.now
-    @client.send(*@method) do |status|
+    @client.send(*@message) do |status|
       puts "#{status.text}" if $DEBUG
       trackers.each do |t|
         t.record(status)
