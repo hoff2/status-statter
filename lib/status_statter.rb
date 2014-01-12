@@ -3,8 +3,8 @@ class StatusStatter
   # optional arguments:
   # 1. which streaming API method to use -- its name as a symbol,
   #    or an array of the method name symbol + arguments. Examples:
-  #      :firehose
-  #      [ :track, 'bacon', 'mom' ]
+  #    :firehose
+  #    [ :track, 'bacon', 'mom' ]
   # 2. API client. If none given, a Tweetstream::Client is created
   #    by default.
   def initialize(message = :sample, _client = false)
@@ -14,6 +14,7 @@ class StatusStatter
   end
 
   attr_reader :client, :message
+  attr_reader :start_time, :stop_time
 
   def tweetstream_client
     require_relative 'status_statter/config'
@@ -28,30 +29,38 @@ class StatusStatter
     TweetStream::Client.new
   end
 
-  # Add classes for objects that will be used to track stats.
-  # An instance of each class added in this way will be created
-  # Each should respond to #initialize, #record(status), and #report
+  # Add classes for objects that will be used to track stats. An
+  # instance of each class added in this way will be created Each
+  # should respond to #initialize, #record(status), and #report
   def register(*tracker)
     @tracker_classes += tracker
   end
 
-  # Start up the status_statter. When stopped with Control-C/SIGINT,
-  # reports will be collected from each of the tracker objects
+  def initialize_trackers
+    @trackers = @tracker_classes.map(&:new)
+  end
+
+  # Start up the StatusStatter.
   def run
-    trackers = @tracker_classes.map(&:new)
+    initialize_trackers
     @start_time = Time.now
     @client.send(*@message) do |status|
       puts "#{status.text}" if $DEBUG
-      trackers.each do |t|
+      @trackers.each do |t|
         t.record(status)
       end
     end
-  rescue SystemExit, Interrupt
-    @stop_time = Time.now
-    @results = trackers.map(&:report)
   end
 
-  # Get results from trackers after #run has been stopped
-  attr_reader :results
+  # Stop the StatusStatter
+  def stop
+    @client.stop
+    @stop_time = Time.now
+  end
 
+  # Collect results from trackers
+  # Can probably be called while running or in-progress reports too
+  def results
+    @trackers.map(&:report)
+  end
 end
