@@ -18,22 +18,26 @@ class AverageOverTime
     @stop_time = Time.now
   end
 
-  def duration_in_seconds
+  def ds
     @stop_time - @start_time
   end
 
-  def duration_in_minutes
-    duration_in_seconds / 60
+  def dm
+    ds / 60
   end
 
-  def duration_in_hours
-    duration_in_minutes / 60
+  def dh
+    dm / 60
   end
 
   def report
-    { average_per_second: @count / duration_in_seconds,
-      average_per_minute: @count / duration_in_minutes,
-      average_per_hour:   @count / duration_in_hours }
+    { start: @start_time,
+      stop: @stop_time,
+      duration: "#{'%02.0f'%dh}:#{'%02.0f'%dm}:#{'%02.0f'%ds}",
+      total: @count,
+      average_per_second: '%.1f' % (@count / ds),
+      average_per_minute: '%.1f' % (@count / dm),
+      average_per_hour:   '%.1f' % (@count / dh) }
   end
 
 end
