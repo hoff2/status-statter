@@ -9,7 +9,7 @@ class StatusStatter
   #    by default.
   def initialize(message = :sample, _client = false)
     @client = _client || tweetstream_client
-    @tracker_classes = []
+    @trackers = []
     @message = message
   end
 
@@ -29,15 +29,14 @@ class StatusStatter
     TweetStream::Client.new
   end
 
-  # Add classes for objects that will be used to track stats. An
-  # instance of each class added in this way will be created Each
-  # should respond to #initialize, #record(status), and #report
+  # Add objects that will be used to track stats. Each should respond
+  # to #start, #record(status), #stop, and #report
   def register(*tracker)
-    @tracker_classes += tracker
+    @trackers += tracker
   end
 
   def initialize_trackers
-    @trackers = @tracker_classes.map(&:new)
+    @trackers.each(&:start)
   end
 
   # Start up the StatusStatter.
@@ -55,6 +54,7 @@ class StatusStatter
   # Stop the StatusStatter
   def stop
     @client.stop
+    @trackers.each(&:stop)
     @stop_time = Time.now
   end
 

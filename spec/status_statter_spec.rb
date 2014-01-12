@@ -27,14 +27,14 @@ describe StatusStatter do
     statter.run
   end
 
-  it "registers trackers by class" do
+  it "registers trackers" do
     client = double('client').as_null_object
-    tracker1 = double('TrackerClass1')
-    tracker2 = double('TrackerClass2')
+    tracker1 = double('tracker1')
+    tracker2 = double('tracker2')
     statter = StatusStatter.new(:message, client)
     statter.register(tracker1, tracker2)
-    tracker1.should_receive(:new)
-    tracker2.should_receive(:new)
+    tracker1.should_receive(:start)
+    tracker2.should_receive(:start)
     statter.run
   end
 
@@ -52,10 +52,8 @@ describe StatusStatter do
   it "notifies tracker objects of statuses received" do
     client = FakeClient.new
     statter = StatusStatter.new(:api_method, client)
-    tracker_class = double('TrackerClass')
     tracker = double('tracker').as_null_object
-    tracker_class.should_receive(:new).and_return(tracker)
-    statter.register(tracker_class)
+    statter.register(tracker)
     tracker.should_receive(:record).with(:tweet)
     statter.run
     client.receive_status(:tweet)
@@ -64,10 +62,8 @@ describe StatusStatter do
   it "collects reports from trackers" do
     client = FakeClient.new
     statter = StatusStatter.new(:api_method, client)
-    tracker_class = double('TrackerClass')
     tracker = double('tracker').as_null_object
-    tracker_class.should_receive(:new).and_return(tracker)
-    statter.register(tracker_class)
+    statter.register(tracker)
     tracker.should_receive(:report).and_return(:report)
     statter.run
     statter.stop # our fake client doesn't really do anything for this
