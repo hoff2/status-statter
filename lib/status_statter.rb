@@ -59,7 +59,7 @@ class StatusStatter
   end
 
   # Collect results from trackers
-  # Can probably be called while running or in-progress reports too
+  # Can probably be called while running for in-progress reports too
   def results
     @trackers.map(&:report)
   end

@@ -46,7 +46,7 @@ describe StatusStatter do
       @handler.call(status)
     end
     def stop; :stop; end
-    def method_missing(*ignored); :ignore; end
+    def method_missing(*any); :ignore; end
   end
 
   it "notifies tracker objects of statuses received" do
