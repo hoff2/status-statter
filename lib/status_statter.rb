@@ -13,6 +13,7 @@ class StatusStatter
     end
     @client = TweetStream::Client.new
     @tracker_classes = []
+    @method = StatusStatter::Config::API_MESSAGE
   end
 
   def register(tracker)
@@ -21,7 +22,7 @@ class StatusStatter
 
   def run
     trackers = @tracker_classes.map(&:new)
-    @client.sample do |status|
+    @client.send(*@method) do |status|
       puts "#{status.text.gsub}" if $DEBUG
       trackers.each do |t|
         t.record(status)
