@@ -8,3 +8,4 @@ end
 statter = StatusStatter.new
 statter.register Total
 statter.run
+puts statter.results.inspect
