@@ -35,9 +35,9 @@ class AverageOverTime
       stop: @stop_time,
       duration: "#{'%02.0f'%dh}:#{'%02.0f'%dm}:#{'%02.0f'%ds}",
       total: @count,
-      average_per_second: '%.1f' % (@count / ds),
-      average_per_minute: '%.1f' % (@count / dm),
-      average_per_hour:   '%.1f' % (@count / dh) }
+      average_per_second: @count / ds,
+      average_per_minute: @count / dm,
+      average_per_hour:   @count / dh }
   end
 
 end
