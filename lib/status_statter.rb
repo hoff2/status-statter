@@ -1,3 +1,5 @@
+require 'status_statter/tracker'
+
 class StatusStatter
 
   # optional arguments:

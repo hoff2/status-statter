@@ -1,8 +1,4 @@
-class AverageOverTime
-
-  def initialize
-    @count = 0
-  end
+class AverageOverTime < StatusStatter::Tracker
 
   def start
     @count = 0

@@ -1,5 +1,4 @@
-# TODO: subclass something that provides empty method defs
-class TopHashtags
+class TopHashtags < StatusStatter::Tracker
 
   def initialize(how_many=10)
     @how_many = how_many

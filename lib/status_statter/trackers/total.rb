@@ -1,4 +1,4 @@
-class Total
+class Total < StatusStatter::Tracker
 
   def start
     @count = 0
@@ -7,8 +7,6 @@ class Total
   def record(status)
     @count += 1
   end
-
-  def stop; end
 
   def report
     { total: @count }
