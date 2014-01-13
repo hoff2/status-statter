@@ -6,19 +6,19 @@ class TopHashtags
   end
 
   def start
-    @counts = Hash.new{|h,k| h[k] = 0}
+    @hashtaghash = Hash.new{|h,k| h[k] = 0}
   end
 
   def record(status)
     status.hashtags.map(&:text).each do |hashtag|
-      @counts[hashtag] += 1
+      @hashtaghash[hashtag] += 1
     end
   end
 
   def stop; end
 
   def report
-    @counts.map{|k, v| { text: k, count: v }}.
+    @hashtaghash.map{|k, v| { text: k, count: v }}.
       sort{|a, b| b[:count] <=> a[:count]}.
       first(@how_many)
   end
