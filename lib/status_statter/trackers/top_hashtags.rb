@@ -19,7 +19,7 @@ class TopHashtags
 
   def report
     @counts.map{|k, v| { text: k, count: v }}.
-      sort{|a, b| a[:count] <=> b[:count]}.
+      sort{|a, b| b[:count] <=> a[:count]}.
       first(@how_many)
   end
 end
