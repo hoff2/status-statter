@@ -7,7 +7,7 @@ Dir[File.join(dir, 'lib/status_statter/trackers/*.rb')].each do |file|
   require file
 end
 statter = StatusStatter.new
-statter.register AverageOverTime.new
+statter.register AverageOverTime.new, TopHashtags.new
 puts "Here we go, hit control-c to stop..."
 trap("SIGINT") { statter.stop }
 statter.run
