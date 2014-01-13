@@ -6,4 +6,5 @@ gem 'awesome_print'
 group :test do
   gem 'rspec'
   gem 'timecop'
+  gem 'faker'
 end
