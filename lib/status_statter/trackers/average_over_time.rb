@@ -1,12 +1,11 @@
 class AverageOverTime
 
-  # The created_at values given by Twitter::Tweet are at the
-  # resolution of seconds. There are no nanoseconds in them.
   def initialize
     @count = 0
   end
 
   def start
+    @count = 0
     @start_time = Time.now
   end
 

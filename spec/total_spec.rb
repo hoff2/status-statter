@@ -6,6 +6,7 @@ describe Total do
   it "counts statuses received" do
     [1, 14, 352].each do |n|
       subject = Total.new
+      subject.start
       n.times{ subject.record(:tweet) }
       subject.report[:total].should == n
     end

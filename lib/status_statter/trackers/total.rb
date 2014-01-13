@@ -1,10 +1,8 @@
 class Total
 
-  def initialize
+  def start
     @count = 0
   end
-
-  def start; end
 
   def record(status)
     @count += 1
