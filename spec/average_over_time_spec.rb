@@ -36,4 +36,13 @@ describe AverageOverTime do
     subject.report[:average_per_hour].should == 7
   end
 
+  it "correctly displays duration in a friendly manner" do
+    start = Time.now
+    Timecop.freeze(start)
+    subject.start
+    Timecop.freeze(start + 5*60*60 + 14*60 + 37)
+    subject.stop
+    expect(subject.report[:duration]).to eq('05:14:37')
+  end
+
 end
