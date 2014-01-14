@@ -45,4 +45,17 @@ describe Urls do
     subject.report[:with_urls].should == 10
     subject.report[:with_urls_pct].should == 25
   end
+
+  it "will count how many statuses have photo urls" do
+    subject.start
+    subject.record(tweet_with('https://pic.twitter.com/Sk3OyxDbFr'))
+    5.times{ subject.record(tweet_with(Faker::Internet.url)) }
+    subject.record(tweet_with('http://instagram.com/p/jC1-sOHkG6/#'))
+    20.times{ subject.record(tweet_with()) } # no urls
+    subject.record(tweet_with('http://instagram.com/p/iOsSuXnkDo/#'))
+    2.times{ subject.record(tweet_with(Faker::Internet.url,
+                                       Faker::Internet.url)) }
+    subject.report[:with_photo].should == 3
+    subject.report[:with_photo_pct].should == 10
+  end
 end

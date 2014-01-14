@@ -33,7 +33,9 @@ class Urls < StatusStatter::Tracker
                         sort{|a, b| b[:count] <=> a[:count]}.first(@how_many),
       total_statuses: @total,
       with_urls:      @with_urls,
-      with_urls_pct:  @with_urls * 100 / @total
+      with_urls_pct:  @with_urls * 100.0 / @total,
+      with_photo:     @with_photo_urls,
+      with_photo_pct: @with_photo_urls * 100.0 / @total
     }
   end
 
