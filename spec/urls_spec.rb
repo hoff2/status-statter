@@ -9,7 +9,7 @@ describe Urls do
     tweet = double("tweet")
     urlobjs = urls.map!{ |url|
       urlobj = double("url")
-      urlobj.stub(extended_url: url)
+      urlobj.stub(expanded_url: url)
       urlobj
     }
     tweet.stub(urls: urlobjs)

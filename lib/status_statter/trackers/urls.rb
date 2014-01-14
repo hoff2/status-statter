@@ -20,7 +20,7 @@ class Urls < StatusStatter::Tracker
     if !status.urls.empty?
       @with_urls += 1
       domains = status.urls.map{ |u|
-        URI.parse(u.extended_url).host.gsub(/^www\./, '') }
+        URI.parse(u.expanded_url).host.gsub(/^www\./, '') }
       domains.each do |domain|
         @domains_seen[domain] += 1
       end

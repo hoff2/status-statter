@@ -1,4 +1,4 @@
-require 'status_statter/tracker'
+require_relative 'status_statter/tracker'
 
 class StatusStatter
 
