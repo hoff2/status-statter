@@ -17,7 +17,7 @@ class Urls < StatusStatter::Tracker
 
   def record(status)
     @total += 1
-    unless status.urls.empty?
+    if !status.urls.empty?
       @with_urls += 1
       domains = status.urls.map{ |u|
         URI.parse(u.extended_url).host.gsub(/^www\./, '') }
@@ -29,9 +29,11 @@ class Urls < StatusStatter::Tracker
   end
 
   def report
-    { domains: @domains_seen.map{|k, v| { domain: k, count: v }}.
-               sort{|a, b| b[:count] <=> a[:count]}.first(@how_many),
-
+    { domains:        @domains_seen.map{|k, v| { domain: k, count: v }}.
+                        sort{|a, b| b[:count] <=> a[:count]}.first(@how_many),
+      total_statuses: @total,
+      with_urls:      @with_urls,
+      with_urls_pct:  @with_urls * 100 / @total
     }
   end
 

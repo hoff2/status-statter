@@ -35,4 +35,14 @@ describe Urls do
     expect(counts).to eq([10, 5, 2])
   end
 
+  it "will count how many statuses have urls" do
+    subject.start
+    7.times{ subject.record(tweet_with(Faker::Internet.url)) }
+    # make sure tweets with multiple URLs are still only counted once
+    3.times{ subject.record(tweet_with(Faker::Internet.url,
+                                       Faker::Internet.url)) }
+    30.times{ subject.record(tweet_with()) } # no urls
+    subject.report[:with_urls].should == 10
+    subject.report[:with_urls_pct].should == 25
+  end
 end
