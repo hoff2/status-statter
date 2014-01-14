@@ -23,7 +23,7 @@ describe TopHashtags do
     tweet = tweet_with(*hashtags)
     subject.start
     subject.record(tweet)
-    expect(subject.report.map{|i| i[:text]}).to match_array(hashtags)
+    expect(subject.report.map{|i| i[:text]}).to match_array(hashtags.uniq)
   end
 
   it "will report top 10 hashtags by default" do
