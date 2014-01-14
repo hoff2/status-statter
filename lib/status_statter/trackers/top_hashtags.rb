@@ -16,8 +16,7 @@ class TopHashtags < StatusStatter::Tracker
 
   def report
     @hashtaghash.map{|k, v| { text: k, count: v }}.
-      sort{|a, b| b[:count] <=> a[:count]}.
-      first(@how_many)
+      sort{|a, b| b[:count] <=> a[:count]}.first(@how_many)
   end
 
 end
